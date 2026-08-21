@@ -2,6 +2,7 @@ package com.othavio.agendadortarefas.controller;
 
 import com.othavio.agendadortarefas.business.TarefaService;
 import com.othavio.agendadortarefas.business.dto.TarefasDto;
+import com.othavio.agendadortarefas.infrastructure.enums.StatusNotificacao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +37,23 @@ public class TarefaController {
     public ResponseEntity<List<TarefasDto>> buscaTarefasPorEmail(@RequestHeader("Authorization") String token){
         List<TarefasDto> tarefas = tarefaService.buscaTarefasPorEmail(token);
         return ResponseEntity.ok(tarefas);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deletaTarefaPorId(@RequestParam("id") String id){
+        tarefaService.deletaTarefaPorId(id);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping
+    public ResponseEntity<TarefasDto> alteraStatusNotificacao(@RequestParam("status")StatusNotificacao status,
+                                                              @RequestParam("id") String id){
+        return ResponseEntity.ok(tarefaService.alteraStatus(status, id));
+    }
+
+    @PutMapping
+    public ResponseEntity<TarefasDto> updateTarefas(@RequestBody TarefasDto dto, @RequestParam("id") String id){
+        return ResponseEntity.ok(tarefaService.updateTarefas(dto, id));
     }
 }
